@@ -11,7 +11,7 @@ def get_audio_duration(audio_path):
     audio = AudioSegment.from_file(audio_path)
     return len(audio) / 1000.0
 
-def calculate_wer(csv_path):
+def calculate_wer(csv_path, metrics_output_path):
 
     wer_calculations = []
     insertions = []
@@ -49,7 +49,9 @@ def calculate_wer(csv_path):
     normalized_average_wer = sum(w * d for w, d in zip(wer_calculations, durations)) / total_duration
 
     # Save results to CSV
-    df.to_csv("assembly_german_metrics.csv", index=False)
+    df.to_csv(f"{metrics_output_path}.csv", index=False)
     print(f"Normalized Average WER: {normalized_average_wer}")
 
     return df, normalized_average_wer
+
+#calculate_wer(/path/to/outputs, assemblyai_english_metrics.csv)

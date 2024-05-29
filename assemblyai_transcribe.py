@@ -16,7 +16,7 @@ def transcribe_audio(file):
     print(transcript.id)
     print(transcript.text)
 
-def transcribe_all_files(audio_folder, labels_folder):
+def transcribe_all_files(audio_folder, labels_folder, output_csv_path):
 
     file_mappings = load_files(audio_folder, labels_folder)
 
@@ -41,6 +41,6 @@ def transcribe_all_files(audio_folder, labels_folder):
         "prediction": transcript_outputs
     })
 
-    df.to_csv("assembly_german_outputs.csv", index=False)
+    df.to_csv(f"{output_csv_path}.csv", index=False)
     print(df)
     return df

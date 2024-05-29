@@ -23,7 +23,7 @@ def transcribe_audio(mp3_path):
 
     return transcript
 
-def transcribe_all_files(audio_folder, labels_folder):
+def transcribe_all_files(audio_folder, labels_folder, output_csv_path):
 
     file_mappings = load_files(audio_folder, labels_folder)
 
@@ -67,7 +67,7 @@ def transcribe_all_files(audio_folder, labels_folder):
         "prediction": transcript_outputs
     })
 
-    df.to_csv("whisper_german_outputs.csv", index=False)
+    df.to_csv(f"{output_csv_path}.csv", index=False)
     print(df)
 
     # Log the failed files
