@@ -1,14 +1,15 @@
 import assemblyai as aai 
-import json
-import sys
-import os 
+import os
+from dotenv import load_dotenv
 import pandas as pd
-import time
-import ast
+from calculate_wer import calculate_wer
 from utils import load_files
-aai.settings.api_key = "KEY"
-config = aai.TranscriptionConfig(language_code="de")
+load_dotenv()
+aai.settings.api_key = os.getenv('ASSEMBLYAI_API_KEY')
+
+config = aai.TranscriptionConfig(language_code="en")
 transcriber = aai.Transcriber(config=config)
+
 
 #test function..
 def transcribe_audio(file):
@@ -16,10 +17,10 @@ def transcribe_audio(file):
     print(transcript.id)
     print(transcript.text)
 
-def transcribe_all_files(audio_folder, labels_folder, output_csv_path):
+def transcribe_all_files_assembly(audio_files, labels_list, output_csv_path):
 
-    file_mappings = load_files(audio_folder, labels_folder)
-
+    file_mappings = load_files(audio_files, labels_list)
+    print(file_mappings)
     audio_paths = []
     truth_text = []
     transcript_outputs = []
@@ -28,8 +29,7 @@ def transcribe_all_files(audio_folder, labels_folder, output_csv_path):
         transcript = transcriber.transcribe(file['audio'])
         print(transcript.text)
 
-        with open(file["truth"], "r") as audio_file:
-            truth_str = audio_file.read()
+        truth_str = file['truth']
         
         truth_text.append(truth_str)
         audio_paths.append(file['audio'])
@@ -41,6 +41,7 @@ def transcribe_all_files(audio_folder, labels_folder, output_csv_path):
         "prediction": transcript_outputs
     })
 
-    df.to_csv(f"{output_csv_path}.csv", index=False)
+    df.to_csv(f"table_csvs/{output_csv_path}", index=False)
     print(df)
+    calculate_wer(f"table_csvs/{output_csv_path}", f"table_wers/{output_csv_path}")
     return df

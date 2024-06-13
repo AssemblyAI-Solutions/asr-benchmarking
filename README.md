@@ -4,17 +4,11 @@
 
 2) Add audio files to `/audios` and add your human transcript labels to `/truth`
 
-3) Add your respective API keys (depending on the vendors you want to use) in the respective transcriber scripts.
+3) Add your respective API keys to a `.env` file (depending on the vendors you want to use) in the respective transcriber scripts. See `.env_sample`
 
-- For example, if you want to get results for assemblyai, you'd add your api key at the top of `assemblyai_transcribe.py`
+4) Run `run_benchmark_local.py` to execute benchmarks on local files
 
-4) Call `assemblyai_transcribe.py` or `openai_whisper_transcribe.py` by calling the `transcribe_all_files` function in each file and passing the path to the truth folder, the path to the audios folder, and the name of the output csv. Uncomment this line in `assemblyai_transcribe.py` or `openai_whisper_transcribe.py`
-
-`transcribe_all_files("/audios", "/truth", "assemblyai_outputs.csv)`
-
-This will produce a csv containing the outputs of the transcription requests. You'll need the path to that csv for step #5.
-
-5) Run the `calculate_wer` script to generate WER results. Uncomment this path in `calculate_wer` and pass your own outputs path and the name of the metrics output file as arguments:
-
-`calculate_wer(/path/to/outputs, assemblyai_english_metrics.csv)`
-
+5) If you want to also run benchmarks against a hugging face dataset (the default is librispeech test clean), then you can run run_benchmark_local.py. Note that you will likely need to download librispeech for the first time and change line 88 in `utils.py` to ensure that you are pointing to the correct place that the dataset was loaded in:
+```    
+base_dir = "/Users/samflamini/.cache/huggingface/datasets/downloads/extracted" #note - you should replace this with your path to the hugging face directory in .cache
+```

@@ -54,4 +54,4 @@ def calculate_wer(csv_path, metrics_output_path):
 
     return df, normalized_average_wer
 
-#calculate_wer(/path/to/outputs, assemblyai_english_metrics.csv)
+# calculate_wer("table_csvs/assemblyai_2024-06-13 15:46:30.918827.csv.csv", "assemblyai_english_metrics.csv")
